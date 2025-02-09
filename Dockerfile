@@ -1,26 +1,31 @@
-# Используем официальный образ Python
+# Используем официальный образ Python 3.9-slim
 FROM python:3.9-slim
 
-# Устанавливаем зависимости системы
+# Устанавливаем системные зависимости, необходимые для сборки некоторых пакетов
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential libpq-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    gcc \
+    libssl-dev \
+    python3-dev \
+    build-essential \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем рабочую директорию
+# Обновляем pip до последней версии
+RUN pip install --no-cache-dir --upgrade pip
+
+# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
-# Копируем зависимости проекта
+# Копируем файл зависимостей в рабочую директорию
 COPY requirements.txt /app/
 
-# Устанавливаем зависимости Python
+# Устанавливаем Python-зависимости из requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем проект
+# Копируем все файлы проекта в контейнер
 COPY . /app/
 
-# Открываем порт для Django
+# Открываем порт 8000 для доступа к приложению
 EXPOSE 8000
 
-# Команда для запуска сервера Django
+# Запускаем сервер Django при старте контейнера
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
