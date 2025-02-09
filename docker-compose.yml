@@ -3,15 +3,12 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+    command: sh -c "cd ./my_project && gunicorn my_project.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - static_volume:/app/staticfiles
+      - .:/app
     ports:
       - "8000:8000"
     environment:
       - DEBUG=0
       - SECRET_KEY=your-secret-key
       - DJANGO_ALLOWED_HOSTS=37.27.216.212,your-domain.com
-
-volumes:
-  static_volume:
