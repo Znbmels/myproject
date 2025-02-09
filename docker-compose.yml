@@ -2,13 +2,16 @@ version: '3.8'
 
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: django_app
+    build: .
+    command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/app/staticfiles
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
     environment:
-      - DEBUG=True
+      - DEBUG=0
+      - SECRET_KEY=your-secret-key
+      - DJANGO_ALLOWED_HOSTS=37.27.216.212,your-domain.com
+
+volumes:
+  static_volume:
