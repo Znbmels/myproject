@@ -3,22 +3,19 @@ from app.models import Lesson, Homework, ErrorLog, User, Student
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)  # Пароль только для записи
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'role', 'password']  # Добавляем поле password
+        fields = ['username', 'password', 'role']
 
     def create(self, validated_data):
-        # Создание пользователя с хэшированием пароля
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data.get('email', ''),  # Email может быть опциональным
-            password=validated_data['password'],   # Хэшируем пароль
-            role=validated_data.get('role', 'student')  # Установите значение по умолчанию
+            password=validated_data['password'],
+            role=validated_data.get('role', 'student')
         )
         return user
-
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
