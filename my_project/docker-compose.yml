@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: django_app
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - static_data:/app/staticfiles  # Том для статических файлов
+      - media_data:/app/media         # Том для медиафайлов
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             gunicorn my_project.wsgi:application --bind 0.0.0.0:8000"
+
+volumes:
+  static_data:
+  media_data:
