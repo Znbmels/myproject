@@ -43,9 +43,10 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()  # Save the new user if data is valid
+            serializer.save()  # Сохранение пользователя с хэшированием пароля
             return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # View for user login with JWT token generation
 class LoginView(APIView):
