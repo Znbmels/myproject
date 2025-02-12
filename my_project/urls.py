@@ -19,7 +19,8 @@ urlpatterns = [
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('api/', include('app.urls')),  # Маршруты нашего приложения
+    path('api/', include('app.urls')),
+    # Маршруты нашего приложения
 ]
 
 # Добавляем маршруты для статических и медиафайлов (только для локальной разработки)

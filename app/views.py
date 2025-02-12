@@ -224,16 +224,26 @@ class StudentErrorListView(APIView):
             return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # View to list lessons for a specific student
+
 class StudentLessonsAPIView(APIView):
-    def get(self, request, student_id):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
         try:
-            # Ensure the student exists and is linked to a User object
-            student = Student.objects.filter(id=student_id).first()
-            if not student:
-                return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
-            lessons = Lesson.objects.filter(students__id=student_id)  # Filter lessons by student ID
+            if not hasattr(request.user, "student"):
+                return Response(
+                    {"error": "Only students can view their lessons"},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            student = request.user.student
+            lessons = Lesson.objects.filter(students=student)
+
+            logger.debug(f"Lessons for student {student.id}: {lessons}")
+
             serializer = LessonSerializer(lessons, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         except Exception as e:
-            logger.error(f"Error fetching lessons for student {student_id}: {e}")
+            logger.error(f"Error fetching lessons for student: {e}")
             return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

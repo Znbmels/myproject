@@ -15,4 +15,5 @@ urlpatterns = [
     path('errors/list/', views.ErrorLogListView.as_view(), name='error-list'),
     path('student/homeworks/', views.StudentHomeworkListView.as_view(), name='student-homeworks'),
     path('student/errors/', views.StudentErrorListView.as_view(), name='student-errors'),
+    path('student/lessons/', views.StudentLessonsAPIView.as_view(), name='student-lessons'),
 ]
