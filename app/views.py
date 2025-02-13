@@ -14,6 +14,7 @@ from app.serializers import (
     LessonSerializer,
     HomeworkSerializer,
     ErrorLogSerializer,
+    LessonMinimalSerializer,
 )
 from app.services.lesson_service import create_lesson, get_lessons_by_teacher
 from app.services.homework_service import create_homework, get_homeworks_for_student
