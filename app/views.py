@@ -224,24 +224,26 @@ class StudentErrorListView(APIView):
             return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # View to list lessons for a specific student
-
 class StudentLessonsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
+            # Проверяем, является ли пользователь студентом
             if not hasattr(request.user, "student"):
                 return Response(
                     {"error": "Only students can view their lessons"},
                     status=status.HTTP_403_FORBIDDEN
                 )
 
+            # Получаем связанные с этим студентом уроки
             student = request.user.student
             lessons = Lesson.objects.filter(students=student)
 
             logger.debug(f"Lessons for student {student.id}: {lessons}")
 
-            serializer = LessonSerializer(lessons, many=True)
+            # Используем минимальный сериализатор для вывода
+            serializer = LessonMinimalSerializer(lessons, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:

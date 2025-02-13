@@ -1,23 +1,27 @@
 from rest_framework import serializers
+from app.models import Lesson, Homework, ErrorLog, Student
 from django.contrib.auth import get_user_model
-from app.models import Lesson, Homework, ErrorLog, Student  # User импортируем через get_user_model
 
-User = get_user_model()
+User = get_user_model()  # Используем вашу кастомную модель
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
     class Meta:
         model = User
-        fields = ['username', 'password', 'role']
+        fields = ['id', 'username', 'email', 'password', 'role']
+        extra_kwargs = {
+            'password': {'write_only': True},  # Скрыть пароль в ответах
+        }
 
     def create(self, validated_data):
-        user = User.objects.create_user(
+        user = User(
             username=validated_data['username'],
-            password=validated_data['password'],
-            role=validated_data.get('role', 'student')
+            email=validated_data.get('email', ''),
+            role=validated_data.get('role', 'student'),  # Добавляем роль
         )
+        user.set_password(validated_data['password'])  # Хэширование пароля
+        user.save()
         return user
+
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -26,19 +30,16 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ['id', 'user', 'name']
 
-class HomeworkSerializer(serializers.ModelSerializer):
-    tasks = serializers.ListField(
-        child=serializers.CharField(max_length=255),  # Каждый элемент массива — строка
-        allow_empty=False  # Не разрешать пустые массивы
-    )
 
+class HomeworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Homework
         fields = ['id', 'lesson', 'day', 'topic', 'tasks']
 
+
 class ErrorLogSerializer(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(role="student")  # Только пользователи с ролью "student"
+        queryset=User.objects.filter(role='student')  # Фильтруем только студентов
     )
 
     class Meta:
@@ -59,3 +60,11 @@ class LessonSerializer(serializers.ModelSerializer):
 
     def get_homeworks(self, obj):
         return HomeworkSerializer(obj.homework_set.all(), many=True).data
+
+
+class LessonMinimalSerializer(serializers.ModelSerializer):
+    teacher_name = serializers.CharField(source='teacher.name', read_only=True)  # Имя учителя
+
+    class Meta:
+        model = Lesson
+        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'zoom_link', 'teacher_name']
