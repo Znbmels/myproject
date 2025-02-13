@@ -37,11 +37,15 @@ class Lesson(models.Model):
     zoom_link = models.URLField()
     students = models.ManyToManyField(Student, related_name='lessons')
 
+
 class Homework(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='homework_set')  # related_name
+    lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE, related_name='homework_set')
     day = models.DateField()
     topic = models.CharField(max_length=255)
-    tasks = models.TextField()
+    tasks = models.JSONField()  # JSONField поддерживается и SQLite
+
+    def __str__(self):
+        return f"{self.topic} ({self.day})"
 
 class ErrorLog(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

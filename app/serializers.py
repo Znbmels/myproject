@@ -27,9 +27,15 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'name']
 
 class HomeworkSerializer(serializers.ModelSerializer):
+    tasks = serializers.ListField(
+        child=serializers.CharField(max_length=255),  # Каждый элемент массива — строка
+        allow_empty=False  # Не разрешать пустые массивы
+    )
+
     class Meta:
         model = Homework
         fields = ['id', 'lesson', 'day', 'topic', 'tasks']
+
 class ErrorLogSerializer(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.filter(role="student")  # Только пользователи с ролью "student"
