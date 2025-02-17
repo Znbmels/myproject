@@ -42,7 +42,7 @@ class Homework(models.Model):
     lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE, related_name='homework_set')
     day = models.DateField()
     topic = models.CharField(max_length=255)
-    tasks = models.JSONField()  # JSONField поддерживается и SQLite
+    tasks = models.JSONField()
 
     def __str__(self):
         return f"{self.topic} ({self.day})"

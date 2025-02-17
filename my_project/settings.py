@@ -8,7 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Настройки безопасности
 SECRET_KEY = 'your-secret-key-here'  # Замените на реальный секретный ключ
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '37.27.216.212']
+ALLOWED_HOSTS = ["tahfiz.halalguide.me", "37.27.216.212"]
+CSRF_TRUSTED_ORIGINS = ["https://tahfiz.halalguide.me"]
+
 
 
 # Приложения
