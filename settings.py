@@ -1,14 +1,40 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 # Базовый путь проекта
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Настройки безопасности
 SECRET_KEY = 'your-secret-key-here'  # Замените на реальный секретный ключ
-DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '37.27.216.212']
+
+if DEBUG:
+    # Настройки для локальной разработки
+    ALLOWED_HOSTS = [
+        'localhost',       # Для локального тестирования
+        '127.0.0.1',       # Для локального тестирования
+        '0.0.0.0',         # Для Docker (если используется)
+    ]
+else:
+    # Настройки для продакшена
+    ALLOWED_HOSTS = [
+        'tahfiz.halalguide.me',  # Ваш домен
+        '37.27.216.212',         # Ваш IPv4-адрес
+        'django_app',            # Имя контейнера (если используется внутри Docker)
+    ]
+
+# Дополнительные настройки безопасности для продакшена
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = [
+        "https://tahfiz.halalguide.me",
+        "http://tahfiz.halalguide.me",  # Если сайт доступен по HTTP
+    ]
+
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Для работы через Cloudflare
+    SECURE_SSL_REDIRECT = True  # Перенаправление HTTP -> HTTPS
+    SESSION_COOKIE_SECURE = True  # Cookies только через HTTPS
+    CSRF_COOKIE_SECURE = True  # CSRF-токены только через HTTPS
 
 
 # Приложения
