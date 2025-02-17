@@ -11,6 +11,11 @@ services:
       - .:/app
       - static_data:/app/staticfiles  # Том для статических файлов
       - media_data:/app/media         # Том для медиафайлов
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"] # Проверка здоровья через curl
+      interval: 30s # Интервал между проверками
+      timeout: 10s # Таймаут для проверки
+      retries: 3 # Количество попыток перед объявлением контейнера нездоровым
     command: >
       sh -c "python manage.py collectstatic --noinput &&
              gunicorn my_project.wsgi:application --bind 0.0.0.0:8000"
