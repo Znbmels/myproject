@@ -8,9 +8,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Настройки безопасности
 SECRET_KEY = 'your-secret-key-here'  # Замените на реальный секретный ключ
 DEBUG = True
-ALLOWED_HOSTS = ["tahfiz.halalguide.me", "37.27.216.212"]
-CSRF_TRUSTED_ORIGINS = ["https://tahfiz.halalguide.me"]
+ALLOWED_HOSTS = [
+    'tahfiz.halalguide.me',  # Ваш домен
+    '37.27.216.212',         # Ваш IPv4-адрес
+    '127.0.0.1',             # Локальный адрес для тестирования
+]
 
+CSRF_TRUSTED_ORIGINS = ["https://tahfiz.halalguide.me"]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 
 # Приложения
