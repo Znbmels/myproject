@@ -3,32 +3,32 @@ from pathlib import Path
 from datetime import timedelta
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-# Базовый путь проекта
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Настройки безопасности
-SECRET_KEY = 'your-secret-key-here'  # Замените на реальный секретный ключ
+
+SECRET_KEY = 'your-secret-key-here'
 
 if DEBUG:
     # Настройки для локальной разработки
     ALLOWED_HOSTS = [
-        'localhost',       # Для локального тестирования
-        '127.0.0.1',       # Для локального тестирования
-        '0.0.0.0',         # Для Docker (если используется)
+        'localhost',
+        '127.0.0.1',
+        '0.0.0.0',         # Для Docker
     ]
 else:
     # Настройки для продакшена
     ALLOWED_HOSTS = [
-        'tahfiz.halalguide.me',  # Ваш домен
-        '37.27.216.212',         # Ваш IPv4-адрес
-        'django_app',            # Имя контейнера (если используется внутри Docker)
+        'tahfiz.halalguide.me',
+        '37.27.216.212',
+        'django_app',            # Имя контейнера
     ]
 
-# Дополнительные настройки безопасности для продакшена
+#  для продакшена
 if not DEBUG:
     CSRF_TRUSTED_ORIGINS = [
         "https://tahfiz.halalguide.me",
-        "http://tahfiz.halalguide.me",  # Если сайт доступен по HTTP
+        "http://tahfiz.halalguide.me",
     ]
 
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Для работы через Cloudflare
@@ -36,7 +36,7 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True  # Cookies только через HTTPS
     CSRF_COOKIE_SECURE = True  # CSRF-токены только через HTTPS
 
-# Приложения
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,10 +48,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'app',
-    'sslserver',# Наше приложение
+    'sslserver',
 ]
 
-# Промежуточные слои (Middleware)
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
