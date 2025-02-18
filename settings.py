@@ -6,6 +6,25 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 # Базовый путь проекта
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# Приложения
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_yasg',
+    'app',  # Наше приложение
+]
+
+# Добавление sslserver только в режиме DEBUG
+if DEBUG:
+    INSTALLED_APPS += ['sslserver']
+
 # Настройки безопасности
 SECRET_KEY = 'your-secret-key-here'  # Замените на реальный секретный ключ
 
@@ -30,26 +49,10 @@ if not DEBUG:
         "https://tahfiz.halalguide.me",
         "http://tahfiz.halalguide.me",  # Если сайт доступен по HTTP
     ]
-
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Для работы через Cloudflare
     SECURE_SSL_REDIRECT = True  # Перенаправление HTTP -> HTTPS
     SESSION_COOKIE_SECURE = True  # Cookies только через HTTPS
     CSRF_COOKIE_SECURE = True  # CSRF-токены только через HTTPS
-
-
-# Приложения
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'drf_yasg',
-    'app',  # Наше приложение
-]
 
 # Промежуточные слои (Middleware)
 MIDDLEWARE = [
