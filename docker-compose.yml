@@ -5,20 +5,29 @@ services:
     build: .
     container_name: django_app
     restart: always
-    ports:
-      - "8000:8000"
     volumes:
       - .:/app
-      - static_data:/app/staticfiles  # Том для статических файлов
-      - media_data:/app/media         # Том для медиафайлов
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"] # Проверка здоровья через curl
-      interval: 30s # Интервал между проверками
-      timeout: 10s # Таймаут для проверки
-      retries: 3 # Количество попыток перед объявлением контейнера нездоровым
+      - static_data:/app/staticfiles
+      - media_data:/app/media
+    expose:
+      - "8000"
     command: >
       sh -c "python manage.py collectstatic --noinput &&
              gunicorn my_project.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=my_project.settings.production
+      # Добавьте здесь другие переменные окружения, например, SECRET_KEY, DATABASE_URL и т.д.
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    restart: always
+    ports:
+      - "80:80"  # Nginx будет принимать запросы на стандартном HTTP-порту
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
 
 volumes:
   static_data:
