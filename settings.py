@@ -23,8 +23,7 @@ INSTALLED_APPS = [
 
 # Добавление sslserver только в режиме DEBUG
 if DEBUG:
-    INSTALLED_APPS += ['sslserver']
-
+    INSTALLED_APPS.append('sslserver')
 # Настройки безопасности
 SECRET_KEY = 'your-secret-key-here'  # Замените на реальный секретный ключ
 
