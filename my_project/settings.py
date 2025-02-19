@@ -1,44 +1,26 @@
 import os
 from pathlib import Path
-from datetime import timedelta
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
+DEBUG = False  # Продакшен
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 SECRET_KEY = 'your-secret-key-here'
 
-if DEBUG:
-    # Настройки для локальной разработки
-    ALLOWED_HOSTS = [
-        'localhost',
-        '127.0.0.1',
-        '0.0.0.0',
-        'tahfiz.halalguide.me',
-        # Для Docker
-    ]
-else:
-    # Настройки для продакшена
-    ALLOWED_HOSTS = [
-        'tahfiz.halalguide.me',
-        '37.27.216.212',
-        'django_app',
-        'tahfiz.halalguide.me',
-    ]
+ALLOWED_HOSTS = [
+    'tahfiz.halalguide.me',
+    '37.27.216.212',
+    'django_app',
+]
 
-#  для продакшена
-if not DEBUG:
-    CSRF_TRUSTED_ORIGINS = [
-        "https://tahfiz.halalguide.me",
-        "http://tahfiz.halalguide.me",
-    ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://tahfiz.halalguide.me",
+    "http://tahfiz.halalguide.me",
+]
 
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Для работы через Cloudflare
-    SECURE_SSL_REDIRECT = True  # Перенаправление HTTP -> HTTPS
-    SESSION_COOKIE_SECURE = True  # Cookies только через HTTPS
-    CSRF_COOKIE_SECURE = True  # CSRF-токены только через HTTPS
-
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
