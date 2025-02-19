@@ -14,14 +14,16 @@ if DEBUG:
     ALLOWED_HOSTS = [
         'localhost',
         '127.0.0.1',
-        '0.0.0.0',         # Для Docker
+        '0.0.0.0',
+        # Для Docker
     ]
 else:
     # Настройки для продакшена
     ALLOWED_HOSTS = [
         'tahfiz.halalguide.me',
         '37.27.216.212',
-        'django_app',            # Имя контейнера
+        'django_app',
+        'tahfiz.halalguide.me',# Имя контейнера
     ]
 
 #  для продакшена
