@@ -15,6 +15,7 @@ if DEBUG:
         'localhost',
         '127.0.0.1',
         '0.0.0.0',
+        'tahfiz.halalguide.me',
         # Для Docker
     ]
 else:
@@ -23,7 +24,7 @@ else:
         'tahfiz.halalguide.me',
         '37.27.216.212',
         'django_app',
-        'tahfiz.halalguide.me',# Имя контейнера
+        'tahfiz.halalguide.me',
     ]
 
 #  для продакшена
